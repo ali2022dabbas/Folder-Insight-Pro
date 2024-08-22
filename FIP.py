@@ -1,7 +1,7 @@
 import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QLineEdit, QFileDialog,
-    QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox, QTextEdit, QDialog
+    QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox, QTextEdit, QDialog, QGridLayout
 )
 from PyQt5.QtCore import Qt, QStandardPaths
 
@@ -58,9 +58,8 @@ class FolderSelectionApp(QMainWindow):
         top_layout.addWidget(self.select_folder_btn)
         top_layout.addWidget(self.start_btn)
 
-        # Combined files and tree section
-        self.files_group = QLabel("Files", self)
-        self.files_layout = QVBoxLayout()
+        # Grid layout for files
+        self.files_layout = QGridLayout()
 
         self.files_widget = QWidget()
         self.files_widget.setLayout(self.files_layout)
@@ -187,21 +186,33 @@ class FolderSelectionApp(QMainWindow):
         copy_all_button = QPushButton("Copy All", self)
         copy_all_button.setObjectName("copyAllButton")
         copy_all_button.clicked.connect(lambda: self.copy_to_clipboard(all_files_text, "All files copied"))
-        self.files_layout.addWidget(copy_all_button)
+        self.files_layout.addWidget(copy_all_button, 0, 0, 1, 3)  # Span across 3 columns
 
         # Add "Tree" button to layout
         tree_button = QPushButton("Tree", self)
         tree_button.setObjectName("treeButton")
         tree_button.clicked.connect(self.copy_tree_to_clipboard)
-        self.files_layout.addWidget(tree_button)
+        self.files_layout.addWidget(tree_button, 0, 3, 1, 3)  # Span across 3 columns
 
         # Create and add buttons for each file
         self.file_buttons = []
+        row = 1
+        col = 0
         for index, file_data in enumerate(self.file_data_list):
             button = QPushButton(file_data[0], self)
+            
+            # Set a fixed width for the buttons, slightly larger
+            button.setFixedWidth(200)  # You can adjust this value as needed
+            button.setFixedHeight(40)  # Increase the height a bit
+
             button.clicked.connect(lambda checked, text=file_data[1]: self.file_preview.setText(text))
             self.file_buttons.append(button)
-            self.files_layout.addWidget(button)
+            self.files_layout.addWidget(button, row, col)
+            
+            col += 1
+            if col == 6:  # Move to the next row after 6 buttons
+                col = 0
+                row += 1
 
     def filter_files(self):
         filter_text = self.search_bar.text().lower()
