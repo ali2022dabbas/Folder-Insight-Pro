@@ -34,7 +34,7 @@ python FIP.py
 
 
 
-**Usage**
+##Usage
 
 Once the application is running, here's how you can use it:
 
@@ -58,7 +58,7 @@ Once the application is running, here's how you can use it:
 
 
 
-Contributing
+## Contributing
 
 Contributions are welcome! If you find a bug, have an idea for a new feature, or want to improve the code, feel free to open an issue or submit a pull request.
 License
