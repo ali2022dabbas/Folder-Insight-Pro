@@ -60,6 +60,8 @@ class FolderSelectionApp(QMainWindow):
 
         # Grid layout for files
         self.files_layout = QGridLayout()
+        self.files_layout.setHorizontalSpacing(5)  # Reduce the gap between columns
+        self.files_layout.setVerticalSpacing(5)  # Reduce the gap between rows
 
         self.files_widget = QWidget()
         self.files_widget.setLayout(self.files_layout)
@@ -102,6 +104,12 @@ class FolderSelectionApp(QMainWindow):
             QPushButton:hover {
                 background-color: #81A1C1;
             }
+            QPushButton#copyAllButton, QPushButton#treeButton {
+                background-color: #BF616A;
+            }
+            QPushButton#copyAllButton:hover, QPushButton#treeButton:hover {
+                background-color: #D08770;
+            }
             QLineEdit {
                 padding: 6px;
             }
@@ -125,6 +133,12 @@ class FolderSelectionApp(QMainWindow):
             }
             QPushButton:hover {
                 background-color: #8FBC8B;
+            }
+            QPushButton#copyAllButton, QPushButton#treeButton {
+                background-color: #BF616A;
+            }
+            QPushButton#copyAllButton:hover, QPushButton#treeButton:hover {
+                background-color: #D08770;
             }
             QLineEdit {
                 padding: 6px;
@@ -185,14 +199,18 @@ class FolderSelectionApp(QMainWindow):
         all_files_text = "\n\n".join([f"Filename:\n{fd[0]}\n\nFile Data:\n{fd[1]}" for fd in self.file_data_list])
         copy_all_button = QPushButton("Copy All", self)
         copy_all_button.setObjectName("copyAllButton")
+        copy_all_button.setFixedWidth(200)  # Same size as file buttons
+        copy_all_button.setFixedHeight(40)  # Same size as file buttons
         copy_all_button.clicked.connect(lambda: self.copy_to_clipboard(all_files_text, "All files copied"))
-        self.files_layout.addWidget(copy_all_button, 0, 0, 1, 3)  # Span across 3 columns
+        self.files_layout.addWidget(copy_all_button, 0, 0, 1, 1)  # No span, single cell
 
         # Add "Tree" button to layout
         tree_button = QPushButton("Tree", self)
         tree_button.setObjectName("treeButton")
+        tree_button.setFixedWidth(200)  # Same size as file buttons
+        tree_button.setFixedHeight(40)  # Same size as file buttons
         tree_button.clicked.connect(self.copy_tree_to_clipboard)
-        self.files_layout.addWidget(tree_button, 0, 3, 1, 3)  # Span across 3 columns
+        self.files_layout.addWidget(tree_button, 0, 1, 1, 1)  # No span, single cell
 
         # Create and add buttons for each file
         self.file_buttons = []
@@ -210,7 +228,7 @@ class FolderSelectionApp(QMainWindow):
             self.files_layout.addWidget(button, row, col)
             
             col += 1
-            if col == 6:  # Move to the next row after 6 buttons
+            if col == 10:  # Move to the next row after 10 buttons
                 col = 0
                 row += 1
 
