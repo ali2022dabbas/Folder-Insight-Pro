@@ -1,10 +1,24 @@
 import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QLineEdit, QFileDialog,
-    QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox, QTextEdit, QTreeView, QSplitter, QGroupBox
+    QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox, QTextEdit, QDialog
 )
-from PyQt5.QtCore import Qt, QSortFilterProxyModel, QStandardPaths
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPalette, QColor
+from PyQt5.QtCore import Qt, QStandardPaths
+
+
+class TreeDialog(QDialog):
+    def __init__(self, tree_text):
+        super().__init__()
+        self.setWindowTitle("File Tree")
+        self.setGeometry(300, 300, 400, 300)
+        self.setMinimumSize(300, 200)
+
+        layout = QVBoxLayout()
+        text_edit = QTextEdit()
+        text_edit.setText(tree_text)
+        text_edit.setReadOnly(True)
+        layout.addWidget(text_edit)
+        self.setLayout(layout)
 
 
 class FolderSelectionApp(QMainWindow):
@@ -44,25 +58,19 @@ class FolderSelectionApp(QMainWindow):
         top_layout.addWidget(self.select_folder_btn)
         top_layout.addWidget(self.start_btn)
 
-        # Collapsible sections
-        self.files_group = QGroupBox("Files")
-        self.files_group.setCheckable(True)
-        self.files_group.setChecked(True)
-        self.files_layout = QHBoxLayout()
-        self.files_group.setLayout(self.files_layout)
+        # Combined files and tree section
+        self.files_group = QLabel("Files", self)
+        self.files_layout = QVBoxLayout()
 
-        self.tree_group = QGroupBox("File Tree")
-        self.tree_group.setCheckable(True)
-        self.tree_group.setChecked(True)
-        self.tree_layout = QVBoxLayout()
-        self.tree_group.setLayout(self.tree_layout)
+        self.files_widget = QWidget()
+        self.files_widget.setLayout(self.files_layout)
 
+        # Set up main layout
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.folder_label)
         main_layout.addLayout(top_layout)
         main_layout.addWidget(self.search_bar)
-        main_layout.addWidget(self.files_group)
-        main_layout.addWidget(self.tree_group)
+        main_layout.addWidget(self.files_widget)
         main_layout.addWidget(self.file_preview)
         main_layout.addWidget(self.theme_toggle_btn)
         main_layout.addWidget(self.export_btn)
@@ -81,10 +89,10 @@ class FolderSelectionApp(QMainWindow):
             QMainWindow {
                 background-color: #2E3440;
             }
-            QLabel, QLineEdit, QPushButton, QGroupBox, QTextEdit {
+            QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #D8DEE9;
                 background-color: #4C566A;
-                border: 1px solid #D8DEE9;
+                border: none;
                 border-radius: 4px;
                 padding: 8px;
                 font-size: 16px;
@@ -98,15 +106,6 @@ class FolderSelectionApp(QMainWindow):
             QLineEdit {
                 padding: 6px;
             }
-            QGroupBox::title {
-                color: #D8DEE9;
-                background-color: transparent;
-            }
-            QGroupBox {
-                border: 1px solid #5E81AC;
-                margin-top: 10px;
-                padding-top: 20px;
-            }
         """)
 
     def set_light_theme(self):
@@ -114,10 +113,10 @@ class FolderSelectionApp(QMainWindow):
             QMainWindow {
                 background-color: #ECEFF4;
             }
-            QLabel, QLineEdit, QPushButton, QGroupBox, QTextEdit {
+            QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #2E3440;
                 background-color: #D8DEE9;
-                border: 1px solid #2E3440;
+                border: none;
                 border-radius: 4px;
                 padding: 8px;
                 font-size: 16px;
@@ -131,15 +130,6 @@ class FolderSelectionApp(QMainWindow):
             QLineEdit {
                 padding: 6px;
             }
-            QGroupBox::title {
-                color: #2E3440;
-                background-color: transparent;
-            }
-            QGroupBox {
-                border: 1px solid #A3BE8C;
-                margin-top: 10px;
-                padding-top: 20px;
-            }
         """)
 
     def toggle_theme(self):
@@ -150,10 +140,7 @@ class FolderSelectionApp(QMainWindow):
         self.dark_theme = not self.dark_theme
 
     def select_folder(self):
-        # Open folder selection dialog
         folder_path = QFileDialog.getExistingDirectory(self, "Select Folder")
-
-        # Update folder path in entry widget
         self.folder_entry.setText(folder_path)
 
     def scan_files(self, work_dir, file_extensions):
@@ -184,7 +171,6 @@ class FolderSelectionApp(QMainWindow):
         return file_tree
 
     def start_processing(self):
-        # Get folder path from entry widget
         folder_path = self.folder_entry.text()
         self.file_data_list = self.scan_files(folder_path, ["py", "html", "css", "js", "svelte"])
 
@@ -200,13 +186,13 @@ class FolderSelectionApp(QMainWindow):
         all_files_text = "\n\n".join([f"Filename:\n{fd[0]}\n\nFile Data:\n{fd[1]}" for fd in self.file_data_list])
         copy_all_button = QPushButton("Copy All", self)
         copy_all_button.setObjectName("copyAllButton")
-        copy_all_button.clicked.connect(lambda checked, text=all_files_text: QApplication.clipboard().setText(text))
+        copy_all_button.clicked.connect(lambda: self.copy_to_clipboard(all_files_text, "All files copied"))
         self.files_layout.addWidget(copy_all_button)
 
         # Add "Tree" button to layout
         tree_button = QPushButton("Tree", self)
         tree_button.setObjectName("treeButton")
-        tree_button.clicked.connect(lambda: QApplication.clipboard().setText(self.generate_file_tree(folder_path)))
+        tree_button.clicked.connect(self.copy_tree_to_clipboard)
         self.files_layout.addWidget(tree_button)
 
         # Create and add buttons for each file
@@ -224,6 +210,16 @@ class FolderSelectionApp(QMainWindow):
                 button.show()
             else:
                 button.hide()
+
+    def copy_to_clipboard(self, text, message):
+        QApplication.clipboard().setText(text)
+        QMessageBox.information(self, "Copied to Clipboard", message)
+
+    def copy_tree_to_clipboard(self):
+        tree_text = self.generate_file_tree(self.folder_entry.text())
+        self.copy_to_clipboard(tree_text, "File tree copied")
+        tree_dialog = TreeDialog(tree_text)
+        tree_dialog.exec_()
 
     def export_file_list(self):
         save_path = QFileDialog.getSaveFileName(self, "Save File List", QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation), "Text Files (*.txt)")[0]
