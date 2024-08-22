@@ -19,16 +19,16 @@ Welcome to **Folder Insight Pro**! This tool is designed to make file management
 Setting up **Folder Insight Pro** is quick and easy. Follow these steps:
 
 1. **Clone the Repository**:
-   git clone https://github.com/ali2022dabbas/Folder-Insight-Pro
+   git clone https://github.com/ali2022dabbas/Folder-Insight-Pro.git
 
-2. **Navigate to the Project Directory**:
+3. **Navigate to the Project Directory**:
 cd folder-insight-pro
 
-3. **Install Dependencies**:
+4. **Install Dependencies**:
 Ensure you have Python installed. Then, install the required Python packages using pip:
 pip install PyQt5
 
-4. **Run the Application**:
+5. **Run the Application**:
 Start the application by running the following command:
 python FIP.py
 
