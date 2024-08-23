@@ -18,7 +18,7 @@ class TreeDialog(QDialog):
         text_edit = QTextEdit()
         text_edit.setText(tree_text)
         text_edit.setReadOnly(True)
-        text_edit.setFont(QFont("Helvetica", 14))  # Apply a nicer font to the tree dialog
+        text_edit.setFont(QFont("Calibri", 14))  # Apply a nicer font to the tree dialog
         layout.addWidget(text_edit)
         self.setLayout(layout)
 
@@ -48,7 +48,7 @@ class FolderSelectionApp(QMainWindow):
         # Set up file preview area with larger, professional font
         self.file_preview = QTextEdit(self)
         self.file_preview.setReadOnly(True)
-        self.file_preview.setFont(QFont("Helvetica", 16))  # Set a larger, professional font
+        self.file_preview.setFont(QFont("Calibri", 16))  # Set a larger, professional font
 
         self.theme_toggle_btn = QPushButton("Toggle Theme", self)
         self.theme_toggle_btn.clicked.connect(self.toggle_theme)
@@ -93,7 +93,7 @@ class FolderSelectionApp(QMainWindow):
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #2E3440;
-                font-family: 'Helvetica';
+                font-family: 'Calibri';
             }
             QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #D8DEE9;
@@ -102,7 +102,7 @@ class FolderSelectionApp(QMainWindow):
                 border-radius: 4px;
                 padding: 8px;
                 font-size: 16px;
-                font-family: 'Helvetica';
+                font-family: 'Calibri';
             }
             QPushButton {
                 background-color: #5E81AC;
@@ -125,7 +125,7 @@ class FolderSelectionApp(QMainWindow):
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #ECEFF4;
-                font-family: 'Helvetica';
+                font-family: 'Calibri';
             }
             QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #2E3440;
@@ -134,7 +134,7 @@ class FolderSelectionApp(QMainWindow):
                 border-radius: 4px;
                 padding: 8px;
                 font-size: 16px;
-                font-family: 'Helvetica';
+                font-family: 'Calibri';
             }
             QPushButton {
                 background-color: #A3BE8C;
@@ -172,12 +172,11 @@ class FolderSelectionApp(QMainWindow):
                     filepath = os.path.join(dirpath, filename)
                     relative_path = os.path.relpath(filepath, work_dir)
                     try:
-                        with open(filepath, 'r') as file:
+                        with open(filepath, 'r', encoding='utf-8') as file:  # Use UTF-8 encoding
                             content = file.read()
                             file_list.append([relative_path, content])
                     except Exception as e:
-                        file_list.append((relative_path, "error"))
-
+                        file_list.append((relative_path, "Error reading file"))
         return file_list
 
     def generate_file_tree(self, work_dir):
@@ -235,7 +234,7 @@ class FolderSelectionApp(QMainWindow):
             button.setFixedWidth(200)
             button.setFixedHeight(40)
             button.setStyleSheet("margin: 2px;")
-            button.clicked.connect(lambda checked, text=file_data[1]: self.file_preview.setText(text))
+            button.clicked.connect(lambda checked, text=file_data[1]: self.file_preview.setPlainText(text))
             self.file_buttons.append(button)
             self.files_layout.addWidget(button, row, col)
 
