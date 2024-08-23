@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox, QTextEdit, QDialog, QGridLayout
 )
 from PyQt5.QtCore import Qt, QStandardPaths
+from PyQt5.QtGui import QFont, QPalette, QColor
 
 
 class TreeDialog(QDialog):
@@ -43,8 +44,10 @@ class FolderSelectionApp(QMainWindow):
         self.search_bar.setPlaceholderText("Search files...")
         self.search_bar.textChanged.connect(self.filter_files)
 
+        # Set up file preview area with larger, professional font
         self.file_preview = QTextEdit(self)
         self.file_preview.setReadOnly(True)
+        self.file_preview.setFont(QFont("Arial", 14))  # Set a larger, professional font
 
         self.theme_toggle_btn = QPushButton("Toggle Theme", self)
         self.theme_toggle_btn.clicked.connect(self.toggle_theme)
@@ -60,8 +63,8 @@ class FolderSelectionApp(QMainWindow):
 
         # Grid layout for files
         self.files_layout = QGridLayout()
-        self.files_layout.setHorizontalSpacing(5)  # Reduce the gap between columns
-        self.files_layout.setVerticalSpacing(5)  # Reduce the gap between rows
+        self.files_layout.setHorizontalSpacing(4)  # Small gap between columns
+        self.files_layout.setVerticalSpacing(4)  # Small gap between rows
 
         self.files_widget = QWidget()
         self.files_widget.setLayout(self.files_layout)
@@ -195,38 +198,42 @@ class FolderSelectionApp(QMainWindow):
         for i in reversed(range(self.files_layout.count())):
             self.files_layout.itemAt(i).widget().setParent(None)
 
-        # Add "Copy All" button to layout
-        all_files_text = "\n\n".join([f"Filename:\n{fd[0]}\n\nFile Data:\n{fd[1]}" for fd in self.file_data_list])
+        # Create and add buttons for "Copy All" and "Tree"
         copy_all_button = QPushButton("Copy All", self)
         copy_all_button.setObjectName("copyAllButton")
-        copy_all_button.setFixedWidth(200)  # Same size as file buttons
-        copy_all_button.setFixedHeight(40)  # Same size as file buttons
-        copy_all_button.clicked.connect(lambda: self.copy_to_clipboard(all_files_text, "All files copied"))
-        self.files_layout.addWidget(copy_all_button, 0, 0, 1, 1)  # No span, single cell
+        copy_all_button.setFixedWidth(200)
+        copy_all_button.setFixedHeight(40)
+        copy_all_button.setStyleSheet("margin: 2px;")
+        copy_all_button.clicked.connect(lambda: self.copy_to_clipboard(
+            "\n\n".join([f"Filename:\n{fd[0]}\n\nFile Data:\n{fd[1]}" for fd in self.file_data_list]),
+            "All files copied"
+        ))
 
-        # Add "Tree" button to layout
         tree_button = QPushButton("Tree", self)
         tree_button.setObjectName("treeButton")
-        tree_button.setFixedWidth(200)  # Same size as file buttons
-        tree_button.setFixedHeight(40)  # Same size as file buttons
+        tree_button.setFixedWidth(200)
+        tree_button.setFixedHeight(40)
+        tree_button.setStyleSheet("margin: 2px;")
         tree_button.clicked.connect(self.copy_tree_to_clipboard)
-        self.files_layout.addWidget(tree_button, 0, 1, 1, 1)  # No span, single cell
 
-        # Create and add buttons for each file
+        # Create and add buttons for each file, and include "Copy All" and "Tree" in the same grid
         self.file_buttons = []
-        row = 1
+        row = 0
         col = 0
-        for index, file_data in enumerate(self.file_data_list):
-            button = QPushButton(file_data[0], self)
-            
-            # Set a fixed width for the buttons, slightly larger
-            button.setFixedWidth(200)  # You can adjust this value as needed
-            button.setFixedHeight(40)  # Increase the height a bit
+        self.files_layout.addWidget(copy_all_button, row, col)
+        col += 1
+        self.files_layout.addWidget(tree_button, row, col)
+        col += 1
 
+        for file_data in self.file_data_list:
+            button = QPushButton(file_data[0], self)
+            button.setFixedWidth(200)
+            button.setFixedHeight(40)
+            button.setStyleSheet("margin: 2px;")
             button.clicked.connect(lambda checked, text=file_data[1]: self.file_preview.setText(text))
             self.file_buttons.append(button)
             self.files_layout.addWidget(button, row, col)
-            
+
             col += 1
             if col == 10:  # Move to the next row after 10 buttons
                 col = 0
