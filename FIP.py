@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox, QTextEdit, QDialog, QGridLayout
 )
 from PyQt5.QtCore import Qt, QStandardPaths
-from PyQt5.QtGui import QFont, QPalette, QColor
+from PyQt5.QtGui import QFont
 
 
 class TreeDialog(QDialog):
@@ -18,6 +18,7 @@ class TreeDialog(QDialog):
         text_edit = QTextEdit()
         text_edit.setText(tree_text)
         text_edit.setReadOnly(True)
+        text_edit.setFont(QFont("Helvetica", 14))  # Apply a nicer font to the tree dialog
         layout.addWidget(text_edit)
         self.setLayout(layout)
 
@@ -47,7 +48,7 @@ class FolderSelectionApp(QMainWindow):
         # Set up file preview area with larger, professional font
         self.file_preview = QTextEdit(self)
         self.file_preview.setReadOnly(True)
-        self.file_preview.setFont(QFont("Arial", 14))  # Set a larger, professional font
+        self.file_preview.setFont(QFont("Helvetica", 16))  # Set a larger, professional font
 
         self.theme_toggle_btn = QPushButton("Toggle Theme", self)
         self.theme_toggle_btn.clicked.connect(self.toggle_theme)
@@ -92,6 +93,7 @@ class FolderSelectionApp(QMainWindow):
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #2E3440;
+                font-family: 'Helvetica';
             }
             QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #D8DEE9;
@@ -100,6 +102,7 @@ class FolderSelectionApp(QMainWindow):
                 border-radius: 4px;
                 padding: 8px;
                 font-size: 16px;
+                font-family: 'Helvetica';
             }
             QPushButton {
                 background-color: #5E81AC;
@@ -122,6 +125,7 @@ class FolderSelectionApp(QMainWindow):
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #ECEFF4;
+                font-family: 'Helvetica';
             }
             QLabel, QLineEdit, QPushButton, QTextEdit {
                 color: #2E3440;
@@ -130,6 +134,7 @@ class FolderSelectionApp(QMainWindow):
                 border-radius: 4px;
                 padding: 8px;
                 font-size: 16px;
+                font-family: 'Helvetica';
             }
             QPushButton {
                 background-color: #A3BE8C;
