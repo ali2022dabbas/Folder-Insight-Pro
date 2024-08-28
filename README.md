@@ -1,5 +1,11 @@
 # Folder Insight Pro
 
+##Table of contents
+- [Features](#Features)
+- [Setup](#Setup)
+- [Usage](#Usage)
+- [Contributing](#Contributing)
+
 Welcome to **Folder Insight Pro**! This tool is designed to make file management a breeze by allowing you to easily explore, filter, and process files within a selected folder. Whether you're a developer, a designer, or someone who works with files frequently, Folder Insight Pro provides a powerful, user-friendly interface to help you manage your files efficiently.
 
 
