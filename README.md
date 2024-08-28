@@ -26,7 +26,7 @@ cd folder-insight-pro
 
 4. **Install Dependencies**:
 Ensure you have Python installed. Then, install the required Python packages using pip:
-pip install PyQt5
+<pip install PyQt5>
 
 5. **Run the Application**:
 Start the application by running the following command:
