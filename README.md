@@ -71,10 +71,10 @@ Once the application is running, here's how you can use it:
 ## Contributing
 
 Contributions are welcome! If you find a bug, have an idea for a new feature, or want to improve the code, feel free to open an issue or submit a pull request.
-License
+
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
-Contact
+
 
 If you have any questions, feel free to reach out through GitHub, or open an issue in this repository.
 
