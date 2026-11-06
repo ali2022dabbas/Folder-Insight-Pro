@@ -1,83 +1,79 @@
 # Folder Insight Pro
 
-##Table of contents
-- [Features](#Features)
-- [Setup](#Setup)
-- [Usage](#Usage)
-- [Contributing](#Contributing)
+Folder Insight Pro lets you explore, filter, preview, measure and export the source files in a folder. Use it for code reviews, documentation and archiving, or to paste a whole project into an AI assistant in one go.
 
-Welcome to **Folder Insight Pro**! This tool is designed to make file management a breeze by allowing you to easily explore, filter, and process files within a selected folder. Whether you're a developer, a designer, or someone who works with files frequently, Folder Insight Pro provides a powerful, user-friendly interface to help you manage your files efficiently.
-
-
+## Table of contents
+- [Features](#features)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Keyboard shortcuts](#keyboard-shortcuts)
+- [Contributing](#contributing)
 
 ## Features
 
-- **Dark & Light Themes**: Toggle between a beautifully designed dark mode and a clean light mode with a simple click.
-- **Grid Layout for Files**: Files are displayed in an organized grid layout, making it easy to view and manage even large numbers of files.
-- **File Search**: Quickly filter and find files using the integrated search bar.
-- **File Preview**: Instantly preview the contents of any file by clicking on its name.
-- **Export File List**: Export the list of files and their contents to a text file for easy sharing or archiving.
-
-
+- **Built-in help (ⓘ)**: click the round *i* button in the top bar (or press `F1`) to open a guide to every part of the app. Small *i* buttons next to each panel open the matching section, and every control has a tooltip.
+- **Folder tree view**: files are shown in a collapsible tree with line counts and sizes. Folders show the totals of everything inside them. You can sort by name, lines or size.
+- **Pick the files you want**: tick or untick files and whole folders, then copy or export only those.
+- **Search and filter**: filter by file name, or turn on **Search inside files** to match text in file contents. Matches are highlighted in the preview, and you can step through them with `F3`. A type filter shows one extension at a time.
+- **Code preview**: line numbers, syntax highlighting, word-wrap toggle and zoom. You can also open a file in your default app or show it in your file manager.
+- **Copy in three formats**: **Markdown** (code blocks), **Plain text** (the original *Filename / File Data* layout) or **XML tags** (`<file path="…">`, a good fit for AI prompts).
+- **Token estimate**: see roughly how many LLM tokens your selection uses before you paste it.
+- **Folder structure diagram**: a `├──`/`└──` tree of the folder, copied to your clipboard. You can also add it to the top of every copy or export.
+- **Export** to `.md`, `.txt` or `.json` (JSON includes size, line count and modified date for each file).
+- **Statistics tab**: totals, a breakdown by file type with share-of-lines bars, and a list of the largest files.
+- **Configurable scanning**: choose your own extensions (with presets, or `*` for all text files), folders to skip (`node_modules`, `.git`, `venv`… are skipped by default), a maximum file size and whether to include hidden files. Binary files are skipped automatically.
+- **Fast and responsive**: scanning runs in the background and can be cancelled.
+- **Nice to have**: drag and drop a folder onto the window, a list of your 10 most recent folders, a dark/light theme, and settings that are remembered between sessions.
 
 ## Setup
 
-Setting up **Folder Insight Pro** is quick and easy. Follow these steps:
-
-1. **Clone the Repository**:
+1. **Clone the repository**
+   ```bash
    git clone https://github.com/ali2022dabbas/Folder-Insight-Pro.git
-
-3. **Navigate to the Project Directory**:
-cd folder-insight-pro
-
-4. **Install Dependencies**:
-Ensure you have Python installed. Then, install the required Python packages using pip:
-```bash
-pip install PyQt5
-```
-
-6. **Run the Application**:
-Start the application by running the following command:
-```bash
-python FIP.py
-```
-
-
+   cd Folder-Insight-Pro
+   ```
+2. **Install the dependency** (Python 3.7+)
+   ```bash
+   pip install PyQt5
+   ```
+3. **Run the app**
+   ```bash
+   python FIP.py
+   # or open a folder straight away:
+   python FIP.py path/to/project
+   ```
 
 ## Usage
 
-Once the application is running, here's how you can use it:
+1. **Choose a folder**: click **Browse…**, paste a path, pick a recent folder, or drag a folder onto the window.
+2. **Scan**: press **Scan** (`F5`). The scan uses the extensions and skip list from **⚙ Settings**.
+3. **Explore**: click a file to preview it, or double-click to open it in your default app. Right-click for more options (copy path, copy one folder, select only this…).
+4. **Filter**: type in the search box. Tick *Search inside files* to search file contents as well.
+5. **Copy or export**: tick the files you want, choose a **Format**, then click **Copy selected** or **Export…**. Only files that are ticked *and* visible under the current filter are included.
+6. **Tree**: click **Tree** to copy and view a diagram of the folder structure.
+7. **Statistics**: open the **Statistics** tab for totals and per-type breakdowns.
 
-   - Select a Folder:
-        Click on the "Select Folder" button to open a dialog box where you can choose the folder you want to explore.
+If you're unsure what something does, click the **ⓘ** button.
 
-   - Start Processing:
-        After selecting your folder, click the "Start Processing" button. The application will scan the folder for files with specific extensions (.py, .html, .css, .js, .svelte) and display them in a grid layout.
+## Keyboard shortcuts
 
-   - Search Files:
-        Use the search bar to filter files by name. As you type, only the files matching your query will be displayed.
-
-   - Preview a File:
-        Click on any file button to see a preview of its content in the text area below.
-
-   - Export File List:
-        Want to save a record of the files in the folder? Click the "Export File List" button to save all file names and contents to a text file.
-
-   - Toggle Theme:
-        Easily switch between dark mode and light mode by clicking the "Toggle Theme" button, depending on your preference or environment.
-
-
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+O` | Browse for a folder |
+| `F5` / `Ctrl+R` | Scan / rescan |
+| `Esc` | Cancel scan / clear search |
+| `Ctrl+F` | Focus search |
+| `F3` / `Shift+F3` | Next / previous match |
+| `Ctrl+Shift+C` | Copy selected files |
+| `Ctrl+T` | Copy and show folder tree |
+| `Ctrl+E` | Export selected files |
+| `Ctrl +` / `Ctrl -` / `Ctrl+0` | Zoom preview |
+| `Ctrl+Shift+L` | Toggle theme |
+| `Ctrl+,` | Settings |
+| `F1` | Help |
 
 ## Contributing
 
-Contributions are welcome! If you find a bug, have an idea for a new feature, or want to improve the code, feel free to open an issue or submit a pull request.
+Contributions are welcome. If you find a bug, have an idea for a new feature or want to improve the code, open an issue or submit a pull request.
 
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-
-If you have any questions, feel free to reach out through GitHub, or open an issue in this repository.
-
-
-
-Folder Insight Pro is designed to help you streamline your workflow and manage your files with ease. We hope you find it as useful as we do! Happy coding! 🚀
+This project is licensed under the MIT License.
